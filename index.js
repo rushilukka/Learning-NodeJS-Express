@@ -1,3 +1,3 @@
-const ifun = require('./1-intro-Express');
+const ifun = require('./2-Render-Redirect');
 
 ifun.fun();
