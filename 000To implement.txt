@@ -1,0 +1,160 @@
+Express.js is a powerful web application framework for Node.js, commonly used for building web servers and APIs. Here are some common but useful implementations with their use cases:
+
+### 1. **Basic Server Setup**
+   - **Use Case:** Setting up a simple server that listens on a specified port.
+   - **Implementation:**
+     ```javascript
+     const express = require('express');
+     const app = express();
+
+     app.get('/', (req, res) => {
+         res.send('Hello World!');
+     });
+
+     app.listen(3000, () => {
+         console.log('Server is running on port 3000');
+     });
+     ```
+
+### 2. **Routing**
+   - **Use Case:** Handling different endpoints and organizing routes.
+   - **Implementation:**
+     ```javascript
+     const express = require('express');
+     const app = express();
+
+     app.get('/', (req, res) => {
+         res.send('Home Page');
+     });
+
+     app.get('/about', (req, res) => {
+         res.send('About Page');
+     });
+
+     app.listen(3000, () => {
+         console.log('Server is running on port 3000');
+     });
+     ```
+
+### 3. **Middleware**
+   - **Use Case:** Adding functionality to the request-response cycle, such as logging, authentication, etc.
+   - **Implementation:**
+     ```javascript
+     const express = require('express');
+     const app = express();
+
+     // Middleware function
+     app.use((req, res, next) => {
+         console.log(`${req.method} request for '${req.url}'`);
+         next();
+     });
+
+     app.get('/', (req, res) => {
+         res.send('Home Page');
+     });
+
+     app.listen(3000, () => {
+         console.log('Server is running on port 3000');
+     });
+     ```
+
+### 4. **Serving Static Files**
+   - **Use Case:** Serving static assets like HTML, CSS, and JavaScript files.
+   - **Implementation:**
+     ```javascript
+     const express = require('express');
+     const path = require('path');
+     const app = express();
+
+     app.use(express.static(path.join(__dirname, 'public')));
+
+     app.listen(3000, () => {
+         console.log('Server is running on port 3000');
+     });
+     ```
+
+### 5. **Handling Forms and JSON Data**
+   - **Use Case:** Parsing incoming requests with form data or JSON.
+   - **Implementation:**
+     ```javascript
+     const express = require('express');
+     const app = express();
+
+     app.use(express.urlencoded({ extended: true })); // For parsing form data
+     app.use(express.json()); // For parsing JSON data
+
+     app.post('/submit-form', (req, res) => {
+         res.send(`Form data received: ${JSON.stringify(req.body)}`);
+     });
+
+     app.listen(3000, () => {
+         console.log('Server is running on port 3000');
+     });
+     ```
+
+### 6. **Error Handling**
+   - **Use Case:** Managing errors in your application gracefully.
+   - **Implementation:**
+     ```javascript
+     const express = require('express');
+     const app = express();
+
+     app.get('/', (req, res) => {
+         throw new Error('Something went wrong!');
+     });
+
+     // Error-handling middleware
+     app.use((err, req, res, next) => {
+         console.error(err.stack);
+         res.status(500).send('Something broke!');
+     });
+
+     app.listen(3000, () => {
+         console.log('Server is running on port 3000');
+     });
+     ```
+
+### 7. **Creating a RESTful API**
+   - **Use Case:** Building a RESTful API with CRUD operations.
+   - **Implementation:**
+     ```javascript
+     const express = require('express');
+     const app = express();
+
+     let items = [];
+
+     app.use(express.json());
+
+     // Create
+     app.post('/items', (req, res) => {
+         const item = req.body;
+         items.push(item);
+         res.status(201).send(item);
+     });
+
+     // Read
+     app.get('/items', (req, res) => {
+         res.send(items);
+     });
+
+     // Update
+     app.put('/items/:id', (req, res) => {
+         const id = parseInt(req.params.id, 10);
+         const updatedItem = req.body;
+         items = items.map(item => item.id === id ? updatedItem : item);
+         res.send(updatedItem);
+     });
+
+     // Delete
+     app.delete('/items/:id', (req, res) => {
+         const id = parseInt(req.params.id, 10);
+         items = items.filter(item => item.id !== id);
+         res.status(204).send();
+     });
+
+     app.listen(3000, () => {
+         console.log('Server is running on port 3000');
+     });
+     ```
+
+These examples should give you a solid foundation for using Express.js in various scenarios.
