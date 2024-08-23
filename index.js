@@ -1,3 +1,3 @@
-const ifun = require('./2-Render-Redirect');
+const ifun = require('./3-Routing');
 
 ifun.fun();
