@@ -1,0 +1,12 @@
+2Files
+│
+├──000FlowDir
+│
+├── public
+    ├── html-files
+    │    ├── index.html
+    │    └── about.html
+    │    
+    └── styles.css
+    └── script.js
+ 

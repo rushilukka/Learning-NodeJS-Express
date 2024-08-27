@@ -1,6 +1,8 @@
+//      3-Routing
+
 const express = require('express');
 const app = express();
-const router = express.Router();
+const routerrr = express.Router();
 
 const users = {
     123: { id: 123, name: 'Product 123', description: 'Description for Product 123', price: 19.99 },
@@ -16,12 +18,13 @@ const fun = () => {
             <a href="http://localhost:3000/sameUrl/123">For SameUrl Multi Methods</a>
             <br>       <br>       <br>
             <a href="http://localhost:3000/api">Actual Routing</a>
-            
-            </h1>
+              </h1>
             `
         );
     });
 
+
+     //1
     // Direct Route - ONLY for Different HTTP Methods
     //   /sameUrl differet types of request
     app.route("/sameUrl/:id")
@@ -41,11 +44,11 @@ const fun = () => {
             // Implement DELETE logic here
         });
         
-        
+        //2
         // Actual Use of ROUTING
         //pass url -  /api/_______
-        app.use('/api',router);
-        router.get('/',(req,res)=>{ //***req res
+        app.use('/api',routerrr);
+        routerrr.get('/',(req,res)=>{ //***req res
             res.send(`<h1>api router says HELLO!! 
                 <br>
                 <br>
@@ -53,7 +56,7 @@ const fun = () => {
                 </h1>
                 `);
         });
-        router.get('/users',(req,res)=>{//*** req res
+        routerrr.get('/users',(req,res)=>{//*** req res
             res.send("<h1>api router directs to users</h1>");
         });
     
