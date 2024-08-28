@@ -2,12 +2,6 @@
 const express = require('express');
 const app = express();
 
-// Dummy user data (In a real app, this would be fetched from a database)
-const users = {
-    1: { id: 1, username: 'admin123', boolAuthentication: true },
-    2: { id: 2, username: 'guest', boolAuthentication: false },
-};
-
 
 const fun = () =>{
   
