@@ -1,3 +1,3 @@
-const ifun = require('./5_1-AuthenticationURL');
+const ifun = require('./5_2-AuthenticationURL-Specific');
 
 ifun.fun();
