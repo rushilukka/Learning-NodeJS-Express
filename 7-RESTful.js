@@ -1,49 +1,137 @@
 const express = require('express');
 const app = express();
+ 
+const fs = require('fs');
+app.use(express.json());
 
+//from req.body
+// As a single object Xnot as Array of Object
+//     {
+//       "name":"Rushi",
+//       "class":"TC1",
+//       "sem":"755"
+//     }
+//----------------------------------------------------  
 let items = [
     { id: 1, name: 'Item 1', description: 'This is item 1' },
     { id: 2, name: 'Item 2', description: 'This is item 2' },
     { id: 3, name: 'Item 3', description: 'This is item 3' }
 ];
 
-app.use(express.json());
+// access by 
+// const data1 = items[0].name;
+// const data2 = items[0]['name'];
+
+
 
 const fun = () => {
-    // Create
-    app.post('/items', (req, res) => {
-        const item = req.body;
-        items.push(item);
-        res.status(201).send(item);
+    app.get('/', (req, res) => {
+        res.send('<h1>Home Page</h1>');
     });
-
-    // Read
+      
+    // Read Items Local
     app.get('/items', (req, res) => {
         res.send(items);
     });
-
-    // Update
-    app.put('/items/:id', (req, res) => {
-        const id = parseInt(req.params.id, 10);
-        const updatedItem = req.body;
-        items = items.map(item => item.id === id ? updatedItem : item);
-        res.send(updatedItem);
-    });
-
-    // Delete
-    app.delete('/items/:id', (req, res) => {
-        const id = parseInt(req.params.id, 10);
-        items = items.filter(item => item.id !== id);
-        res.status(204).send();
-    });
-
     
+    
+//-----------------------------------------------------------------------
+    let users = JSON.parse(fs.readFileSync('./7Files/data.json', 'utf8'));
+
+    //Create user
+    //Auto increment id :-
+    app.post("/create", (req, res) => {
+        const body = req.body;
+        const name  =  body['name'];
+        const i = users.find(user => user.name === name);
+        if (i) {
+            console.log(i);
+            return res.status(404).json({ message: 'User already exists' });
+        }
+        else{
+            
+            console.log(i);
+               users.push({ ... body, id: users.length +1 });
+    
+        fs.writeFile("./7Files/data.json", JSON.stringify(users), (err, data) => {
+          if(err) return res.json({ status: "Error" });
+             return res. json({ status: "success", id: users.length});
+        });
+        }   
+    
+    }
+);
+
+    //Read all users
+    app.get('/read',(req, res) => {
+        const usersData = users.map((user) => ({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          class: user.class,
+          sem: user.sem,
+        }));
+        return res.json(usersData);
+      });
+      
+      // Search users by name
+    app.get('/read/:name', (req, res) => {
+    // Convert the name to lowercase for case-insensitive search
+    const name = req.params.name.toLowerCase(); 
+    
+    const matchingUsers = users.filter(user => user.name.toLowerCase() === name);
+
+    if (matchingUsers.length > 0) {
+        return res.json(matchingUsers);
+    } else {
+        return res.status(404).json({ message: 'No users found with the given name' });
+    }
+});
+    
+    // Update user by ID
+    app.put('/update/:id', (req, res) => {
+        const id = Number(req.params.id);
+        const index = users.findIndex(user => user.id === id);
+
+        if (index !== -1) {
+            // Update user data with the request body
+            users[index] = { ...users[index], ...req.body };
+
+            // Save the updated users array back to data.json
+            fs.writeFileSync('data.json', JSON.stringify(users, null, 2));
+
+            return res.json(users[index]);
+        } else {
+            return res.status(404).json({ message: 'User not found' });
+        }
+    });
+
+    // Delete user by ID
+    app.delete('/delete/:id', (req, res) => {
+        const id = Number(req.params.id);
+        const index = users.findIndex(user => user.id === id);
+
+        if (index !== -1) {
+            // Remove the user from the array
+            const deletedUser = users.splice(index, 1);
+
+            // Save the updated users array back to data.json
+            fs.writeFileSync('data.json', JSON.stringify(users, null, 2));
+
+            return res.json({ message: 'User deleted successfully', user: deletedUser });
+        } else {
+            return res.status(404).json({ message: 'User not found' });
+        }
+    });
+
 
     app.listen(3000, () => {
         console.log('Server is running on port 3000');
     });
-};
 
+
+
+};
 module.exports = {
     fun
 };
