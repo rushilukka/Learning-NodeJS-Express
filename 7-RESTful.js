@@ -5,62 +5,41 @@ const fs = require('fs');
 app.use(express.json());
 
 //from req.body
-// As a single object Xnot as Array of Object
+// As a single object X not as Array of Object
 //     {
 //       "name":"Rushi",
 //       "class":"TC1",
 //       "sem":"755"
 //     }
 //----------------------------------------------------  
-let items = [
-    { id: 1, name: 'Item 1', description: 'This is item 1' },
-    { id: 2, name: 'Item 2', description: 'This is item 2' },
-    { id: 3, name: 'Item 3', description: 'This is item 3' }
-];
 
-// access by 
-// const data1 = items[0].name;
-// const data2 = items[0]['name'];
-
-
+let users = JSON.parse(fs.readFileSync('./7Files/data.json', 'utf8'));
 
 const fun = () => {
-    app.get('/', (req, res) => {
-        res.send('<h1>Home Page</h1>');
-    });
-      
-    // Read Items Local
-    app.get('/items', (req, res) => {
-        res.send(items);
-    });
-    
-    
-//-----------------------------------------------------------------------
-    let users = JSON.parse(fs.readFileSync('./7Files/data.json', 'utf8'));
 
     //Create user
-    //Auto increment id :-
+        //Auto increment id :-
+        //Check if Already exists :-
     app.post("/create", (req, res) => {
         const body = req.body;
-        const name  =  body['name'];
+        const name = body['name'];
         const i = users.find(user => user.name === name);
         if (i) {
             console.log(i);
             return res.status(404).json({ message: 'User already exists' });
         }
         else{
-            
             console.log(i);
                users.push({ ... body, id: users.length +1 });
-    
-        fs.writeFile("./7Files/data.json", JSON.stringify(users), (err, data) => {
-          if(err) return res.json({ status: "Error" });
+            fs.writeFile("./7Files/data.json", JSON.stringify(users), (err, data) => {
+              if(err) return res.json({ status: "Error" });
              return res. json({ status: "success", id: users.length});
-        });
+            });
         }   
     
     }
-);
+    );
+//----------------------------------------------------  
 
     //Read all users
     app.get('/read',(req, res) => {
@@ -74,20 +53,23 @@ const fun = () => {
         return res.json(usersData);
       });
       
-      // Search users by name
+    // Search users by name
     app.get('/read/:name', (req, res) => {
-    // Convert the name to lowercase for case-insensitive search
-    const name = req.params.name.toLowerCase(); 
-    
-    const matchingUsers = users.filter(user => user.name.toLowerCase() === name);
+        // Convert the name to lowercase for case-insensitive search
+        const name = req.params.name.toLowerCase(); 
+        
+        const matchingUsers = users.filter(user => user.name.toLowerCase() === name);
 
-    if (matchingUsers.length > 0) {
-        return res.json(matchingUsers);
-    } else {
-        return res.status(404).json({ message: 'No users found with the given name' });
-    }
-});
+        if (matchingUsers.length > 0) {
+            return res.json(matchingUsers);
+        } else {
+            return res.status(404).json({ message: 'No users found with the given name' });
+        }
+    });
+
     
+//----------------------------------------------------  
+
     // Update user by ID
     app.put('/update/:id', (req, res) => {
         const id = Number(req.params.id);
@@ -105,6 +87,9 @@ const fun = () => {
             return res.status(404).json({ message: 'User not found' });
         }
     });
+
+
+//----------------------------------------------------  
 
     // Delete user by ID
     app.delete('/delete/:id', (req, res) => {
@@ -128,8 +113,6 @@ const fun = () => {
     app.listen(3000, () => {
         console.log('Server is running on port 3000');
     });
-
-
 
 };
 module.exports = {
