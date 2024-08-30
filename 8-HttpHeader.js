@@ -5,12 +5,12 @@ const app = express();
 
 const fun = () => {
 
-    app.get('/head', (req, res) => {
+    app.get('/', (req, res) => {
         // Fetching insights from request headers using req.get()
-        const userAgent = req.get('User-Agent');
+        const userAgent = req.get('user-agent');
         const host = req.get('Host');
         const acceptLanguage = req.get('Accept-Language');
-        
+        //const acceptLanguage = req.header['Accept-Language'];
         console.log('User-Agent:', userAgent);
         console.log('Host:', host);
         console.log('Accept-Language:', acceptLanguage);
