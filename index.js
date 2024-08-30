@@ -1,3 +1,3 @@
-const ifun = require('./9-HttpStatusCode');
+const ifun = require('./7-RESTful');
 
 ifun.fun();
