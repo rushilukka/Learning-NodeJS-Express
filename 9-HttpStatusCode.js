@@ -1,11 +1,8 @@
 //      9-HttpStatusCode
-
 const express = require('express');
 const app = express();
 
-
 const fun = () => {
-
         //won't work 100
     app.get('/', (req, res) => {
          res.status(100).send('Home Page');
@@ -14,7 +11,6 @@ const fun = () => {
           const status = 100;
         res.status(status).send(`Continue ${status}`);
     });
-
     app.get('/2', (req, res) => {
           const status = 200;
         res.status(status).send(`Success - Everything is OK! ${status}`);
@@ -41,9 +37,6 @@ const fun = () => {
     app.listen(3000, () => {
         console.log('Server is running on port 3000');
     });
-
-
-
 
 };
 module.exports = {
